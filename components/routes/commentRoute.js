@@ -10,6 +10,30 @@ module.exports = function(app) {
         }
         res.redirect('/login');
     }
+
+    //edit comment
+    router.put('/:id/:comment_id', (req, res) => {
+        let update = { text: req.body.text}
+        Comment.findByIdAndUpdate(req.params.comment_id,update,{new: true},(err, updatedcomment) => {
+            if(err){
+                console.log(err);
+            }else{
+                res.send(updatedcomment);
+            }
+        })
+    })
+
+    //DESTROY comment
+    router.delete('/:id/:comment_id',(req, res) => {
+        Comment.findByIdAndDelete(req.params.comment_id,(err,deletedComment) => {
+            if(err){
+                console.log(err)
+            }else{
+                res.send(deletedComment);
+            }
+        })
+    })
+
     //show individual photo
     router.get('/:id', (req, res) => {
         const actualPage = '/photo' ;
@@ -24,6 +48,7 @@ module.exports = function(app) {
             }
         })
     })
+
     //add comment to a photo
     router.post('/:id', isLoggedIn ,(req, res) => {
         //look up photo using ID
@@ -52,6 +77,8 @@ module.exports = function(app) {
             }
         })
     })
+
+
 
     return router;
 }

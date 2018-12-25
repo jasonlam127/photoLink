@@ -24,6 +24,7 @@ app.prepare()
     const server = express()
     server.use(bodyParser.json())
     server.use(methodOverride("_method"))
+
     //PASSPORT CONFIGURATION==========================
     server.use(require('express-session')({
         secret: "my secret",
@@ -36,12 +37,10 @@ app.prepare()
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
 
-    
     //ROUTES
     server.use('/',authRoute);
     server.use('/',photoRoute);
     server.use('/',commentRoute);
-  
   
     server.get('*', (req, res) => {
         return handle(req, res)

@@ -17,7 +17,6 @@ export default class extends Component {
     }
 
     static async getInitialProps ({ query: { user } }) {
-        console.log(user);
         return {user:user}
     }
 

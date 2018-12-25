@@ -1,90 +1,72 @@
 import Layout from '../components/Layout.js'
 import React, { Component } from 'react'
 import Card from '../components/Card.js'
-import axios from 'axios'
+import EditForm from '../components/EditForm.js'
+import ShowComment from '../components/ShowComment.js'
 
 export default class extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            text: "",
-            errorLabel: "",
-            errorLabelHidden: true,
-            list: [],
-            data: props.data
+            data: props.data,
         };
     }
+
     static getInitialProps ({ query: { data ,user } }) {
         return { data: data , user:user}
     }
-    onChange = (e) => {
-        // Because we named the inputs to match their corresponding values in state, it's
-        // super easy to update the state
-        this.setState({[e.target.name]: e.target.value});
+
+    onUpdateComment = (response) => {
+        let newData =this.state.data ;
+        newData.comments.push(response.data);
+        this.setState({data: newData});
     }
 
+    onEditComment = (response) => {
+        let newData =this.state.data ;
+        newData.comments.forEach(element => {
+            if(element._id === response._id){
+                element.text = response.text;
+                return;
+            }
+        });
+        this.setState({data: newData});
+    }
 
-    onSubmit = (e) => {
-        e.preventDefault();
-        // get our form data out of state
-        const {text} = this.state;
-        axios.post('/'+this.props.data._id,{text:text})
-            .then((response) => {
-                var payload = "Upload Success";
-                //console.log(`response fetched. ${payload}`);
-                this.setState({
-                    text: "",
-                    author: "",
-                    errorLabelHidden: true,
-                    list: this.state.list.concat([payload])
-                });
+    onDeleteComment = (response) => {
+        let newData =this.state.data ;
+      
+        //find object with response.id then remove it
+        let index = newData.comments.map(x => {
+            return x._id;
+        }).indexOf(response._id);
+          
+        newData.comments.splice(index, 1);
+        console.log(newData.comments);
 
-                //add new data to new state
-                let newData =this.state.data ;
-                newData.comments.push(response.data);
-                this.setState({data: newData});
-            })
-            .catch((error) => {
-                var payload = JSON.stringify(error, null, 2);
-                console.log(error);
-                this.setState({
-                    errorLabelHidden: false,
-                    errorLabel: "OOPS that didn't work :(",
-                    list: this.state.list.concat([payload])
-                });
-            });
+        this.setState({data: newData});
     }
 
     render () {
-        //console.log(this.props.data);
         const {text} = this.state;
 
         return (
             <Layout title = 'PhotoLink'  user = {this.props.user}>
                 <div className ="container">
-                    <Card photo = {this.props.data} isZoom ={false} />
-                    { this.props.user ? (
-                        <form onSubmit={this.onSubmit}>
-                            <div className="form-group">
-                                <div className = "form-inline">
-                                    <label htmlFor="add-comment">Write a comment:</label>
-                                </div>
-                                <textarea className="form-control mt-1" rows="2" name="text" value={text} onChange={this.onChange}></textarea>
-                                <button type="submit" className="btn btn-primary btn-sm mt-2">Submit</button>
-                            </div>
-                        </form>
-                    ):(<span></span>)}
-                    
+                    <Card photo = {this.props.data} isZoom ={false} user = {this.props.user} />
+                    { this.props.user &&
+                        <EditForm data = {this.props.data} onUpdateComment ={this.onUpdateComment} />
+                    }
                     {
                         this.state.data.comments.map((e,i) => (
-                            <div key ={i}>
-                                <h3>{e.author.username}</h3>
-                                <h5>{e.text}</h5>
-                            </div>
+                            <ShowComment photo = {this.props.data} e={e} key={i}  onEditComment ={this.onEditComment} onDeleteComment = {this.onDeleteComment}/>
                         ))
                     }
                 </div>
+                <style jsx>{`
+                    
+                `}</style>
             </Layout>
         )
     }

@@ -1,7 +1,6 @@
 import Layout from '../components/Layout.js'
 import React, { Component } from 'react'
 import axios from 'axios'
-import Router from 'next/router'
 
 export default class extends Component {
     
@@ -31,10 +30,8 @@ export default class extends Component {
         axios.post('/signup', {username: name,password: password})
             .then((response) => {
                 if(response.data ==='success'){
-                    //console.log('response'+ response.data)
-                    //var payload = JSON.stringify(response, null, 2);
                     var payload = "Upload Success";
-                    //console.log(`response fetched. ${payload}`);
+
                     this.setState({
                         name: "",
                         password: "",

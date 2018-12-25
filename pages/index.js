@@ -47,7 +47,7 @@ export default class extends Component {
                     <div className="row ">
                         {
                             this.props.data.map((photo,i) => (
-                                <Card key={i} photo = {photo} isZoom = {1}/>
+                                <Card key={i} photo = {photo} isZoom = {1} user = {this.props.user}/>
                             ))
                         }
                     </div>
