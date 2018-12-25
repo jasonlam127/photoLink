@@ -10,18 +10,26 @@ export default class extends Component {
 
         return (
             <span key ={i} className="cardstyle col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div className="card text-dark shadow-sm" >
+                <div className="card text-dark shadow-sm " >
                     <a className="card-img-box" href={photo._id} >
                         {isZoom?(
-                            <img className="card-img-top zoom" src={photo.image} alt="Card image cap"/>
+                            <img className="card-img-top zoom rounded-top" src={photo.image} alt="Card image cap"/>
                         ):(
-                            <img className="card-img-top" src={photo.image} alt="Card image cap"/>
+                            <img className="card-img-top rounded-top" src={photo.image} alt="Card image cap"/>
                         )}
                     </a>
-                    <div className="card-body">
-                        <p className="card-text font-weight-normal">{photo.name}</p>
-                        <small className="card-text font-weight-normal">{photo.author.username}</small>
-                        <p className="card-text font-weight-normal">{photo.description}</p>
+                    <div className="card-body rounded-bottom">
+                        <h6 className="card-text font-weight-bold">{photo.name.substring(0, 20)}</h6>
+                        <h6 className="card-text font-weight-normal text-muted">{photo.author.username}</h6>
+                        {
+                            !isZoom &&
+                            <p className="card-text font-weight-normal reduceMT">{photo.description}</p>
+                        }
+                        {
+                            isZoom &&
+                            <p className="card-text font-weight-normal reduceMT">{photo.description.substring(0, 100)}</p>
+                        }
+                        
                         {(() => {
                             let photoauthorid = new String(photo.author.id);
                             if (!isZoom && user && photoauthorid == user._id) {
@@ -51,6 +59,7 @@ export default class extends Component {
                     width: 100%;
                     border: none;
                 }
+                
                 .cardstyle {
                     padding: 0.3em !important;
                 }

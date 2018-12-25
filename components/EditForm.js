@@ -52,17 +52,22 @@ export default class extends Component {
         const {text} = this.state;
 
         return (
-            <span>
+            <div className ="container">
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <div className = "form-inline">
                             <label htmlFor="add-comment">Write a comment:</label>
                         </div>
                         <textarea className="form-control mt-1" rows="2" name="text" value={text} onChange={this.onChange}></textarea>
-                        <button type="submit" className="btn btn-primary btn-sm mt-2">Submit</button>
+                        <button type="submit" className="btn btn-primary btn-sm mt-2 mb-3">Submit</button>
                     </div>
                 </form>
-            </span>
+                <style jsx>{`
+                    .container {
+                        
+                    }
+                `}</style>
+            </div>
         )
     }
 }

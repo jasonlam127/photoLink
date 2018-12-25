@@ -43,7 +43,6 @@ export default class extends Component {
         }).indexOf(response._id);
           
         newData.comments.splice(index, 1);
-        console.log(newData.comments);
 
         this.setState({data: newData});
     }
@@ -55,17 +54,19 @@ export default class extends Component {
             <Layout title = 'PhotoLink'  user = {this.props.user}>
                 <div className ="container">
                     <Card photo = {this.props.data} isZoom ={false} user = {this.props.user} />
+                    {
+                        this.state.data.comments.map((e,i) => (
+                            <ShowComment user = {this.props.user} photo = {this.props.data} e={e} key={i}  onEditComment ={this.onEditComment} onDeleteComment = {this.onDeleteComment}/>
+                        ))
+                    }
                     { this.props.user &&
                         <EditForm data = {this.props.data} onUpdateComment ={this.onUpdateComment} />
                     }
-                    {
-                        this.state.data.comments.map((e,i) => (
-                            <ShowComment photo = {this.props.data} e={e} key={i}  onEditComment ={this.onEditComment} onDeleteComment = {this.onDeleteComment}/>
-                        ))
-                    }
                 </div>
                 <style jsx>{`
-                    
+                    .container{
+                        background-color:#f2f2f2;
+                    }
                 `}</style>
             </Layout>
         )

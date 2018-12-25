@@ -81,32 +81,50 @@ export default class extends Component {
         const{text} = this.state;
         return (
             <div>
-                <p>{e.author.username}</p>
-                {
-                    !this.state.isEdit &&
-                    <p>{e.text}</p>   
-                }
-                {
-                    this.state.isEdit &&
-                    <form onSubmit={this.onSubmit}>
-                        <div className="form-group">
-                            <textarea className="form-control mt-1" rows="1" name="text" value={text} onChange={this.onChange}></textarea>
-                            <button type="submit" className="btn btn-primary btn-sm mt-1">Submit</button>
-                            <button onClick = {this.onClick} className="btn btn-primary btn-sm ml-2 mt-1">Cancel</button>
+                <div className="list-group">
+                    <div className="list-group-item list-group-item-action mb-2 shadow-sm">
+                        <div className="d-flex w-100 justify-content-between">
+                            <h6 className="mb-1">{e.author.username}</h6>
+                            <small className="text-muted">3 days ago</small>
                         </div>
-                    </form>
-                }
-                {
-                    !this.state.isEdit &&
-                    <span>
-                        <a onClick = {this.onClick} className="btn btn-primary text-white btn-sm mb-2">Edit</a>
-                        <a onClick = {this.onSubmitDelete} className="btn btn-primary btn-sm text-white ml-2 mb-2 "> Delete </a>
-                    </span>
+                        {
+                            !this.state.isEdit &&
+                            <p className="mb-1">{e.text}</p>   
+                        }
+                        {
+                            this.state.isEdit &&
+                            <form onSubmit={this.onSubmit}>
+                                <div className="form-group">
+                                    <textarea className="form-control mt-1" rows="5" name="text" value={text} onChange={this.onChange}></textarea>
+                                    <button type="submit" className="btn btn-primary btn-sm mt-1">Submit</button>
+                                    <button onClick = {this.onClick} className="btn btn-primary btn-sm ml-2 mt-1">Cancel</button>
+                                </div>
+                            </form>
+                        }
+                        
+                        {(() => {
+                            let commentauthorid = new String(e.author.id);
+                            if (!this.state.isEdit && this.props.user && commentauthorid == this.props.user._id) {
+                                return (
+                                    // Expected server HTML to contain a matching <span> in <div>
+                                    <span>
+                                        <a onClick = {this.onClick} className="btn btn-primary text-white btn-sm ">Edit</a>
+                                        <a onClick = {this.onSubmitDelete} className="btn btn-primary btn-sm text-white ml-2  "> Delete </a>
+                                    </span>
+                                )
+                            }
+                        })()}
+                    </div>
+                </div>
 
-                }
+                
+
                 <style jsx>{`
-                    p{
-                        line-height:10px;
+                    .list-group-item-action{
+                        border: none;
+                    }
+                    .list-group{
+                      
                     }
                     #btn-inline{
                         display:inline;

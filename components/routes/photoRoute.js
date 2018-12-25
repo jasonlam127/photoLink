@@ -105,7 +105,7 @@ module.exports =  function(app) {
 
     //DESTROY photo
     router.delete('/:id',checkPhotoOwnerShip,(req, res) => {
-        Photo.findOneAndDelete(req.params.id,(err) => {
+        Photo.findByIdAndDelete(req.params.id,(err) => {
             if(err){
                 console.log(err)
             }else{
