@@ -21,7 +21,6 @@ module.exports =  function(app) {
                     if(foundPhoto.author.id.equals(req.user._id)){
                         next();
                     }else{
-                        //redirect to login page
                         res.redirect('back');
                     }
                 }
@@ -34,8 +33,7 @@ module.exports =  function(app) {
     router.get('/getPhotos', (req, res) => {
         Photo.find({},function(err,data){
             if(err){
-                console.log(err);
-                app.render(req, res ,"/" , null)
+                res.redirect('back');
             }else{
                 const queryParams = { d: data }
                 res.send(queryParams);
@@ -63,11 +61,14 @@ module.exports =  function(app) {
                 }
             },(err,data) => {
                 if(err){
-                    console.log(err);
+                    let response ={error:true,errormessage:err.message}
+                    res.send(response);
                 }else{
                     //redirect to new photo
+                    
                     let url = '/' + data._id
-                    res.send(url);
+                    let response ={error:false,url:url}
+                    res.send(response);
                 }
             }
         )
@@ -92,7 +93,7 @@ module.exports =  function(app) {
             description:req.body.description,
             image:req.body.img
         }
-        Photo.findOneAndUpdate(req.params.id,update,(err, updatedPhoto) => {
+        Photo.findByIdAndUpdate(req.params.id,update,(err, updatedPhoto) => {
             if(err){
                 console.log(err)
             }else{

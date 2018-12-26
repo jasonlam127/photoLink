@@ -12,7 +12,6 @@ export default class extends Component {
             img: "",
             errorLabel: "",
             errorLabelHidden: true,
-            list: []
         };
     }
 
@@ -30,42 +29,39 @@ export default class extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         // get our form data out of state
-        const {title,img,description, list, errorLabel} = this.state;
+        const {title,img,description, errorLabel} = this.state;
 
         axios.post('/', {title: title,img: img,description: description})
             .then((response) => {
-                //access the resp here....
-                console.log('response'+ response.data)
-                //var payload = JSON.stringify(response, null, 2);
-                var payload = "Upload Success";
-                console.log(`response fetched. ${payload}`);
-                this.setState({
-                    title: "",
-                    description: "",
-                    img: "",
-                    errorLabelHidden: true,
-                    list: this.state.list.concat([payload])
-                });
+                
+                if(!response.data.error){
+                    this.setState({
+                        title: "",
+                        description: "",
+                        img: "",
+                        errorLabelHidden: true,
+                    });
 
-                //redirect back to new photo
-                window.location = response.data;
-                //const href = '/'
-                //router.push(href)
-
+                    //redirect back to new photo
+                    window.location = response.data.url;
+                }else{
+                    this.setState({
+                        errorLabelHidden: false,
+                        errorLabel: response.data.errormessage,
+                    });
+                }
+                
             })
             .catch((error) => {
-                var payload = JSON.stringify(error, null, 2);
-                console.log(error);
                 this.setState({
                     errorLabelHidden: false,
                     errorLabel: "OOPS that didn't work :(",
-                    list: this.state.list.concat([payload])
                 });
             });
     }
 
     render () {
-        const {title,description,img, list, errorLabel} = this.state;
+        const {title,description,img, errorLabel} = this.state;
 
         return (
             <Layout title = 'PhotoLink' user = {this.props.user}>
@@ -73,7 +69,11 @@ export default class extends Component {
                 <form className="container" onSubmit={this.onSubmit}>
                     
                     <h4>Submit a photo</h4>
-
+                    {!this.state.errorLabelHidden &&
+                        <div className="alert alert-danger" role="alert">
+                            {errorLabel}
+                        </div>
+                    }
                     <div className="form-group">
                         <label htmlFor="title">Title</label>
                         <input type="text" className="form-control" id="exampleTitle" placeholder="Title" required name="title" value={title} onChange={this.onChange}/>

@@ -15,7 +15,7 @@ module.exports = function(app) {
         let newUser = new User({username:req.body.username});
         User.register(newUser,req.body.password, (err,user) => {
             if(err){
-                console.log(err);
+                res.send(err.message);
             }else{
                 passport.authenticate("local")(req,res, ()=> {
                     //redirect to homepage
@@ -30,13 +30,24 @@ module.exports = function(app) {
         const queryParams = {user:req.user};
         app.render(req, res,actualPage,queryParams);
     })
-    //log in 
-    router.post('/login', passport.authenticate("local",{
-            failureMessage:true,
-            failureRedirect: '/login'
-        }) ,(req,res) => {
-            res.send('success');
-    })
+    //log in
+    router.post('/login', (req, res, next) => {
+        passport.authenticate('local', (err, user, info)=>{
+        
+          if (err) { 
+            return res.send(err.message); 
+          }
+          if (!user) {
+            return res.send(info.message)
+          }
+          req.logIn(user, function(err) {
+            if (err) { return res.send(info.message) }
+            return res.send('success');
+          });
+
+        })(req, res, next);
+      });
+
     //Log Out
     router.get('/logout',(req,res) => {
         req.logout();

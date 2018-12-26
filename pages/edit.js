@@ -12,7 +12,6 @@ export default class extends Component {
             img: this.props.photo.image,
             errorLabel: "",
             errorLabelHidden: true,
-            list: []
         };
     }
 
@@ -29,35 +28,30 @@ export default class extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         // get our form data out of state
-        const {title,img,description, list, errorLabel} = this.state;
+        const {title,img,description, errorLabel} = this.state;
 
         axios.post('/'+this.props.photo._id+'?_method=PUT', {title: title,img: img,description: description})
             .then((response) => {
-                var payload = "Upload Success";
-                //console.log(`response fetched. ${payload}`);
+                
                 this.setState({
                     title: "",
                     description: "",
                     img: "",
                     errorLabelHidden: true,
-                    list: this.state.list.concat([payload])
                 });
                 //redirect back to homepage
                 window.location = response.data;
             })
             .catch((error) => {
-                var payload = JSON.stringify(error, null, 2);
-                console.log(error);
                 this.setState({
                     errorLabelHidden: false,
                     errorLabel: "OOPS that didn't work :(",
-                    list: this.state.list.concat([payload])
                 });
             });
     }
 
     render () {
-        const {title,description,img, list, errorLabel} = this.state;
+        const {title,description,img, errorLabel} = this.state;
 
         return (
             <Layout title = 'PhotoLink' user = {this.props.user}>
@@ -65,7 +59,11 @@ export default class extends Component {
                 <form className="container" onSubmit={this.onSubmit}>
                     
                     <h4>Edit photo</h4>
-
+                    {!this.state.errorLabelHidden &&
+                        <div className="alert alert-danger" role="alert">
+                            {errorLabel}
+                        </div>
+                    }
                     <div className="form-group">
                         <label htmlFor="title">Title</label>
                         <input type="text" className="form-control" id="exampleTitle" placeholder="Title" required name="title" value={title} onChange={this.onChange}/>

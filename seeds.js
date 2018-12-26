@@ -37,7 +37,7 @@ const seedDB = () => {
         if(err){
             console.log(err);
         }
-        
+        /*
         //all few photos
         data.forEach((seed) => {
             Photo.create(seed,(err,photo) => {
@@ -61,6 +61,7 @@ const seedDB = () => {
                 }
             })
         })
+        */
     })
     
     

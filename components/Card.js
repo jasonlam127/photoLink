@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Moment from 'react-moment';
 
 export default class extends Component {
     constructor(props) {
@@ -7,7 +8,7 @@ export default class extends Component {
 
     render () {
         const {photo, i ,isZoom,user} = this.props;
-
+        //console.log();
         return (
             <span key ={i} className="cardstyle col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                 <div className="card text-dark shadow-sm " >
@@ -20,7 +21,10 @@ export default class extends Component {
                     </a>
                     <div className="card-body rounded-bottom">
                         <h6 className="card-text font-weight-bold">{photo.name.substring(0, 20)}</h6>
-                        <h6 className="card-text font-weight-normal text-muted">{photo.author.username}</h6>
+                        <div className ='time'>
+                        <h6 className="card-text font-weight-normal text-muted time">{photo.author.username}</h6>
+                        <h6 className="card-text font-weight-normal text-muted timeMoment ml-2"><Moment fromNow>{photo.updatedAt}</Moment></h6>
+                        </div>
                         {
                             !isZoom &&
                             <p className="card-text font-weight-normal reduceMT">{photo.description}</p>
@@ -76,6 +80,12 @@ export default class extends Component {
                 }
                 .zoom:hover {
                     transform: scale(1.08); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                }
+                .time{
+                    display:inline;
+                }
+                .timeMoment{
+                    float:right;
                 }
                 `}</style>
             </span>

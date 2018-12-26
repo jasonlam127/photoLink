@@ -30,13 +30,11 @@ export default class extends Component {
         axios.post('/signup', {username: name,password: password})
             .then((response) => {
                 if(response.data ==='success'){
-                    var payload = "Upload Success";
-
+                    
                     this.setState({
                         name: "",
                         password: "",
                         errorLabelHidden: true,
-                        list: this.state.list.concat([payload])
                     });
                     
                     //redirect back to homepage
@@ -44,16 +42,17 @@ export default class extends Component {
 
                 }else{
                     //log in failure handling
+                    this.setState({
+                        errorLabelHidden: false,
+                        errorLabel: response.data,
+                    });
                 }
 
             })
             .catch((error) => {
-                var payload = JSON.stringify(error, null, 2);
-                console.log(error);
                 this.setState({
                     errorLabelHidden: false,
                     errorLabel: "OOPS that didn't work :(",
-                    list: this.state.list.concat([payload])
                 });
             });
     }
@@ -67,6 +66,11 @@ export default class extends Component {
                 <form className="container" onSubmit={this.onSubmit}>
                     
                     <h4>Sign Up</h4>
+                    {!this.state.errorLabelHidden &&
+                        <div className="alert alert-danger" role="alert">
+                            {errorLabel}
+                        </div>
+                    }
 
                     <div className="form-group">
                         <label htmlFor="title">User Name</label>

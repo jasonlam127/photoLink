@@ -1,4 +1,5 @@
 const mongoose    = require('mongoose')
+const timestamps = require('mongoose-timestamp')
 
 const photoSchema = new mongoose.Schema({
     name: String,
@@ -18,5 +19,7 @@ const photoSchema = new mongoose.Schema({
         }
     ]
 })
+
+photoSchema.plugin(timestamps);
 
 module.exports = mongoose.model("Photo",photoSchema);

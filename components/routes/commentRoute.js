@@ -20,7 +20,6 @@ module.exports = function(app) {
                     if(foundComment.author.id.equals(req.user._id)){
                         next();
                     }else{
-                        //redirect to login page
                         res.redirect('back');
                     }
                 }
@@ -35,7 +34,7 @@ module.exports = function(app) {
         let update = { text: req.body.text}
         Comment.findByIdAndUpdate(req.params.comment_id,update,{new: true},(err, updatedcomment) => {
             if(err){
-                console.log(err);
+                res.redirect('back');
             }else{
                 res.send(updatedcomment);
             }
@@ -46,7 +45,7 @@ module.exports = function(app) {
     router.delete('/:id/:comment_id', checkCommentOwnerShip, (req, res) => {
         Comment.findByIdAndDelete(req.params.comment_id,(err,deletedComment) => {
             if(err){
-                console.log(err)
+                res.redirect('back');
             }else{
                 res.send(deletedComment);
             }
@@ -58,8 +57,8 @@ module.exports = function(app) {
         const actualPage = '/photo' ;
         Photo.findById(req.params.id).populate("comments").exec((err,data)=>{
             if(err){
-                console.log(err);
-                //app.render(req, res ,"/" , null)
+                //console.log(err);
+                res.redirect('back'); 
             }else{
                 //redirect back to index
                 const queryParams = {  data:data , user:req.user}
@@ -73,7 +72,7 @@ module.exports = function(app) {
         //look up photo using ID
         Photo.findById(req.params.id,(err, photo) => {
             if(err){
-                console.log(err);
+                res.redirect('back');
             }else{
                 //create new comment
                 Comment.create({
@@ -84,7 +83,7 @@ module.exports = function(app) {
                         }
                     },(err, comment) => {
                         if(err){
-                            console.log(err);
+                            res.redirect('back');
                         }else{
                             //add comments to photo
                             photo.comments.push(comment);

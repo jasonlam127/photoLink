@@ -11,7 +11,6 @@ export default class extends Component {
             password: "",
             errorLabel: "",
             errorLabelHidden: true,
-            list: []
         };
     }
 
@@ -25,35 +24,32 @@ export default class extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         // get our form data out of state
-        const {name,password, list, errorLabel} = this.state;
+        const {name,password, errorLabel} = this.state;
 
         axios.post('/login', {username: name,password: password})
             .then((response) => {
-                
                 if(response.data ==='success'){
-                    //var payload = JSON.stringify(response, null, 2);
-                    var payload = "Upload Success";
-                    console.log(`response fetched. ${payload}`);
+                    console.log('login success')
                     this.setState({
                         name: "",
                         password: "",
                         errorLabelHidden: true,
-                        list: this.state.list.concat([payload])
                     });
                     //redirect back to homepage
                     window.location = "/"
                 }else{
                     //log in failure handling
+                    this.setState({
+                        errorLabelHidden: false,
+                        errorLabel: response.data,
+                    });
                 }
 
             })
             .catch((error) => {
-                var payload = JSON.stringify(error, null, 2);
-                console.log(error);
                 this.setState({
                     errorLabelHidden: false,
                     errorLabel: "OOPS that didn't work :(",
-                    list: this.state.list.concat([payload])
                 });
             });
     }
@@ -67,7 +63,11 @@ export default class extends Component {
                 <form className="container" onSubmit={this.onSubmit}>
                    
                     <h4>LogIn</h4>
-
+                    {!this.state.errorLabelHidden &&
+                        <div className="alert alert-danger" role="alert">
+                            {errorLabel}
+                        </div>
+                    }
                     <div className="form-group">
                         <label htmlFor="title">User Name</label>
                         <input type="text" className="form-control" id="exampleTitle" placeholder="username" required name="name" value={name} onChange={this.onChange}/>
@@ -76,8 +76,6 @@ export default class extends Component {
                         <label htmlFor="description">Password</label>
                         <input type="password" className="form-control" id="exampleDiscription" placeholder="password" name="password" value={password} onChange={this.onChange}/>
                     </div>
-
-                    <div><span hidden>{errorLabel}</span></div>
 
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Moment from 'react-moment';
 
 export default class extends Component {
     
@@ -85,7 +86,7 @@ export default class extends Component {
                     <div className="list-group-item list-group-item-action mb-2 shadow-sm">
                         <div className="d-flex w-100 justify-content-between">
                             <h6 className="mb-1">{e.author.username}</h6>
-                            <small className="text-muted">3 days ago</small>
+                            <small className="text-muted"><Moment fromNow>{e.updatedAt}</Moment></small>
                         </div>
                         {
                             !this.state.isEdit &&
