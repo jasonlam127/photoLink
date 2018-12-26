@@ -9,6 +9,7 @@ export default class extends Component {
         this.state = {
             name: "",
             password: "",
+            password2: "",
             errorLabel: "",
             errorLabelHidden: true,
             list: []
@@ -25,8 +26,15 @@ export default class extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         // get our form data out of state
-        const {name,password, list, errorLabel} = this.state;
+        const {name,password,password2, list, errorLabel} = this.state;
 
+        if(password != password2){
+            this.setState({
+                errorLabelHidden: false,
+                errorLabel: "Passwords do not match.",
+            });
+            return;
+        }
         axios.post('/signup', {username: name,password: password})
             .then((response) => {
                 if(response.data ==='success'){
@@ -58,7 +66,7 @@ export default class extends Component {
     }
 
     render () {
-        const {name,password, list, errorLabel} = this.state;
+        const {name,password,password2, list, errorLabel} = this.state;
 
         return (
             <Layout title = 'PhotoLink'>
@@ -79,6 +87,10 @@ export default class extends Component {
                     <div className="form-group">
                         <label htmlFor="description">Password</label>
                         <input type="password" className="form-control" id="exampleDiscription" placeholder="password" name="password" value={password} onChange={this.onChange}/>
+                    </div>
+                    <div className="form-group">
+                    <label htmlFor="password2">Confirm Password</label>
+                    <input id="password2" className="form-control" type="password" name="password2" placeholder="password" value={password2} onChange={this.onChange} />
                     </div>
 
                     <div><span hidden>{errorLabel}</span></div>

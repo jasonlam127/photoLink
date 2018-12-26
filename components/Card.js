@@ -27,11 +27,11 @@ export default class extends Component {
                         </div>
                         {
                             !isZoom &&
-                            <p className="card-text font-weight-normal reduceMT">{photo.description}</p>
+                            <p className="card-text font-weight-normal reduceMT ">{photo.description}</p>
                         }
                         {
                             isZoom &&
-                            <p className="card-text font-weight-normal reduceMT">{photo.description.substring(0, 100)}</p>
+                            <p className="card-text font-weight-normal reduceMT ">{photo.description.substring(0, 100)}</p>
                         }
                         
                         {(() => {
@@ -87,6 +87,7 @@ export default class extends Component {
                 .timeMoment{
                     float:right;
                 }
+                
                 `}</style>
             </span>
         )

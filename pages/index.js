@@ -1,9 +1,11 @@
 import SlideShow from '../components/SlideShow.js'
 import Layout from '../components/Layout.js'
-import Card from '../components/Card.js'
+import Gallery from '../components/Gallery.js'
 import React, { Component } from 'react'
 import axios from 'axios'
 import 'isomorphic-fetch'
+
+
 
 export default class extends Component {
     
@@ -11,8 +13,11 @@ export default class extends Component {
         super(props);
     }
 
-    static async getInitialProps ({ query: { user } }) {
+    static async getInitialProps ({ query: { user ,isSearch, data} }) {
         //console.log(user);
+        if(isSearch){
+            return { data: data ,user:user}
+        }
         const resx = await fetch('http://localhost:3000/getPhotos')
         const json = await resx.json()
         return { data: json.d ,user:user}
@@ -20,6 +25,8 @@ export default class extends Component {
 
     render () {
         //console.log(this.props);
+        
+
         return (
             <Layout title = 'PhotoLink' user = {this.props.user} >
 
@@ -42,31 +49,18 @@ export default class extends Component {
                         </div>
                     </div>
                 </div>
+                
+                <Gallery user = {this.props.user} data = {this.props.data} />
 
-                <div className="containerGrid">
-                    <div className="row ">
-                        {
-                            this.props.data.map((photo,i) => (
-                                <Card key={i} photo = {photo} isZoom = {1} user = {this.props.user}/>
-                            ))
-                        }
-                    </div>
-                </div>
+                
+
+                
                 
                 <style jsx>{`
                     
                     body{
                         background: #f9f9f9 !important;
                     }
-                
-                    .containerGrid{
-                        width:98%;
-                        margin-left:auto; 
-                        margin-right:auto; 
-                        padding: 1em;
-                        padding-top: 0em;
-                    }
-
                     .containerButton{
                         width:98%;
                         margin-left:auto; 

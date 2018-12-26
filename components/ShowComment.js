@@ -90,7 +90,7 @@ export default class extends Component {
                         </div>
                         {
                             !this.state.isEdit &&
-                            <p className="mb-1">{e.text}</p>   
+                            <p className="mb-1 is-breakable">{e.text}</p>   
                         }
                         {
                             this.state.isEdit &&
@@ -129,6 +129,10 @@ export default class extends Component {
                     }
                     #btn-inline{
                         display:inline;
+                    }
+                    .is-breakable{
+                        word-wrap: break-word;
+
                     }
                 `}</style>
             </div>

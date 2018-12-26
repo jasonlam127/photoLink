@@ -29,15 +29,35 @@ module.exports =  function(app) {
             res.redirect('/login');
         }
     }
+
+    function escapeRegex(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
+    
+    router.get('/getPhotosSearch', (req, res) => {
+        if (req.query.search) {
+            const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+            Photo.find({"name":regex},function(err,data){
+                if(err){
+                    res.redirect('back');
+                }else{
+                    const queryParams = {user:req.user,data: data,isSearch:true};
+                    app.render(req, res,'/',queryParams);
+                }
+            })
+        }else{
+            res.redirect('back');
+        }
+    })
     //API to get all photos in front page
     router.get('/getPhotos', (req, res) => {
         Photo.find({},function(err,data){
-            if(err){
-                res.redirect('back');
-            }else{
-                const queryParams = { d: data }
-                res.send(queryParams);
-            }
+                if(err){
+                    res.redirect('back');
+                }else{
+                    const queryParams = { d: data }
+                    res.send(queryParams);
+                }
         })
     })
 

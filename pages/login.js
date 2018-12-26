@@ -62,7 +62,7 @@ export default class extends Component {
                 
                 <form className="container" onSubmit={this.onSubmit}>
                    
-                    <h4>LogIn</h4>
+                    <h4>Log In</h4>
                     {!this.state.errorLabelHidden &&
                         <div className="alert alert-danger" role="alert">
                             {errorLabel}
@@ -78,6 +78,13 @@ export default class extends Component {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Submit</button>
+
+                    <div className="form-group mt-5">
+                    <hr></hr>
+                        <label htmlFor="sign up inline ml-2">Not A User Yet ?</label>
+                        <a className=" inline mr-2" href="/signup">  Sign Up</a>
+                        <label className="inline mr-2" htmlFor="sign up ">Here</label>
+                    </div>
                 </form>
 
                 <style jsx>{`
@@ -91,6 +98,9 @@ export default class extends Component {
                     h4{
                         margin-top:1em;
                         margin-bottom:1em;
+                    }
+                    .inline{
+                        display: inline;
                     }
                 `}</style>
             </Layout>
