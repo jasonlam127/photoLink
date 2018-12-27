@@ -11,6 +11,10 @@ export default class extends Component {
     
     constructor(props) {
         super(props);
+        this.state = {
+            isWIPfinished:false
+        }
+        
     }
 
     static async getInitialProps ({ query: { user ,isSearch, data} }) {
@@ -34,10 +38,17 @@ export default class extends Component {
 
                 <div className="containerButton btn-group">
 
-                    <div className="uploadButton ml-3">
+                    <div className="uploadButton ml-3 ">
                         <a className="btn btn-info" href="/submit">Submit</a>
                     </div>
 
+                    <div className = 'container'>
+                        <form className="form-inline  my-lg-0 lead" action ='/getPhotosSearch' method='GET'>
+                            <input className="form-control  mr-sm-2" name ='search' type="search" placeholder="Search" aria-label="Search" />
+                            <button className="btn btn-outline-success mt-1 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                    {this.state.isWIPfinished &&
                     <div className="dropdown mb-2 ml-auto">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Sort By:
@@ -48,7 +59,10 @@ export default class extends Component {
                             <a className="dropdown-item" href="#">Most Recent</a>
                         </div>
                     </div>
+                    }
                 </div>
+
+                
                 
                 <Gallery user = {this.props.user} data = {this.props.data} />
 

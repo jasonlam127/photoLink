@@ -13,9 +13,11 @@ const handle = app.getRequestHandler()
 const authRoute    = require('./components/routes/authRoute')(app)
 const commentRoute = require('./components/routes/commentRoute')(app)
 const photoRoute   = require('./components/routes/photoRoute')(app)
+const result = require('dotenv').load()
 
 //connect to server
-mongoose.connect("mongodb://localhost:27017/photolink",{useNewUrlParser:true});
+//mongoose.connect("mongodb://localhost:27017/photolink",{useNewUrlParser:true});
+mongoose.connect(process.env.MONGODBLINK,{useNewUrlParser:true})
 
 //seedDB(); //seed the db
 

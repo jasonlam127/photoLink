@@ -1,7 +1,30 @@
 const express = require('express')
 const router = express.Router();
 const Photo   = require('../models/photo')
+const multer = require('multer')
+require('dotenv').load()
 
+const storage = multer.diskStorage({
+    filename: function(req, file, callback) {
+      callback(null, Date.now() + file.originalname);
+    }
+});
+
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter})
+
+const cloudinary = require('cloudinary');
+    cloudinary.config({ 
+    cloud_name: 'diawd3qjb', 
+    api_key: '796752476622836', 
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 module.exports =  function(app) {
 
     //=================ROUTES BELOW =====================
@@ -92,6 +115,33 @@ module.exports =  function(app) {
                 }
             }
         )
+    })
+
+    //create photo by upload 
+    router.post('/upload', isLoggedIn, upload.single('image'), (req, res) => {
+        console.log(process.env.CLOUDINARY_API_SECRET);
+        cloudinary.uploader.upload(req.file.path, function(result) {
+            Photo.create(
+                {
+                    name: req.body.title,
+                    description: req.body.description,
+                    image: result.secure_url,// add cloudinary url for the image to the campground object under image propert
+                    author: {
+                        id: req.user._id,
+                        username: req.user.username
+                    }
+                },(err,data) => {
+                    if(err){
+                        //let response ={error:true,errormessage:err.message}
+                        res.redirect('back');
+                    }else{
+                        //redirect to new photo
+                        res.redirect('/' + data._id);
+                    }
+                }
+            )
+        });
+        
     })
 
     //EDIT photo page
