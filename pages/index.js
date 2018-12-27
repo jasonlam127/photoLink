@@ -22,7 +22,7 @@ export default class extends Component {
         if(isSearch){
             return { data: data ,user:user}
         }
-        const resx = await fetch(`${server}/getPhotos`)
+        const resx = await fetch(`${server}getPhotos`)
         const json = await resx.json()
         return { data: json.x ,user:user}
     }
