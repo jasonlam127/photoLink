@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import 'isomorphic-fetch'
 const dev = process.env.NODE_ENV !== 'production';
-const server = dev ? 'http://localhost:3000' : 'https://photolink122.herokuapp.com/';
+const server = dev ? 'http://localhost:3000' : 'https://photolink122.herokuapp.com';
 
 export default class extends Component {
     
@@ -18,7 +18,7 @@ export default class extends Component {
     }
 
     static async getInitialProps ({ query: { user ,isSearch, data} }) {
-        //console.log(user);
+        
         if(isSearch){
             return { data: data ,user:user}
         }
@@ -28,9 +28,6 @@ export default class extends Component {
     }
 
     render () {
-        //console.log(this.props);
-        
-
         return (
             <Layout title = 'PhotoLink' user = {this.props.user} >
 
