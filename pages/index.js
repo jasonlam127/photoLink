@@ -4,8 +4,8 @@ import Gallery from '../components/Gallery.js'
 import React, { Component } from 'react'
 import axios from 'axios'
 import 'isomorphic-fetch'
-const dev = process.env.NODE_ENV !== 'production';
-const server = dev ? 'http://localhost:3000' : 'https://photolink122.herokuapp.com';
+
+
 
 export default class extends Component {
     
@@ -18,16 +18,21 @@ export default class extends Component {
     }
 
     static async getInitialProps ({ query: { user ,isSearch, data} }) {
-        
+        //console.log(user);
         if(isSearch){
             return { data: data ,user:user}
         }
-        const resx = await fetch(`${server}getPhotos`)
-        const json = await resx.json()
-        return { data: json.x ,user:user}
+        const resx = await axios('https://photolink122.herokuapp.com/getPhotos')
+        
+        //eval(require('locus'))
+        //const json = await resx.json()
+        return { data: resx.data.d ,user:user}
     }
 
     render () {
+        //console.log(this.props);
+        
+
         return (
             <Layout title = 'PhotoLink' user = {this.props.user} >
 
