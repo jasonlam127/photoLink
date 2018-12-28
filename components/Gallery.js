@@ -3,7 +3,7 @@ import Masonry from 'react-masonry-component';
 import Card from '../components/Card.js'
 
 const masonryOptions = {
-    transitionDuration: 2
+    transitionDuration: 0
 };
 const imagesLoadedOptions = { background: '.my-bg-image-el' }
  
